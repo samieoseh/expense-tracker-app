@@ -5,9 +5,8 @@ import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import NoPage from "./pages/NoPage";
 import { ThemeProvider } from "./components/ui/theme-provider";
-import { ReactNode } from "react";
 
-function App({ children }: { children: ReactNode }) {
+function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <BrowserRouter>
@@ -18,7 +17,6 @@ function App({ children }: { children: ReactNode }) {
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
-      {children}
     </ThemeProvider>
   );
 }
