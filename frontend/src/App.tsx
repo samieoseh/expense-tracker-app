@@ -5,6 +5,7 @@ import SignupPage from "./pages/auth/SignupPage";
 import NoPage from "./pages/NoPage";
 import { ThemeProvider } from "./components/ui/theme-provider";
 import AuthLayout from "./pages/auth/AuthLayout";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/auth/login" element={<LoginPage />} />
             <Route path="/auth/signup" element={<SignupPage />} />
           </Route>
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
