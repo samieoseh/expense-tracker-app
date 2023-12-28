@@ -57,7 +57,7 @@ const SignupPage = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className="font-bold" />
+                  <FormMessage className="font-bold text-red-500" />
                 </FormItem>
               )}
             />
