@@ -1,5 +1,8 @@
 import { LucideArrowDownLeft, LucideArrowUpRight } from "lucide-react";
 import { ModeToggle } from "../components/ui/mode-toggle";
+import HealthIcon from "../assets/health-icon.png";
+import GasolineIcon from "../assets/gasoline-icon.png";
+import InternetIcon from "../assets/internet-icon.png";
 
 const DashboardPage = () => {
   return (
@@ -18,7 +21,7 @@ const DashboardPage = () => {
       <main className="pt-8">
         <div className="flex items-center flex-col space-y-2">
           <h2 className="text-sm">AVAILABLE BALANCE</h2>
-          <h1 className="text-2xl">$12,000</h1>
+          <h1 className="text-2xl font-bold">$12,000</h1>
         </div>
         <div className="flex justify-between pt-8 space-x-8">
           <div className="border flex flex-1 space-x-4 bg-background rounded-lg shadow-md py-2 px-4 border-green-200 items-center">
@@ -42,6 +45,46 @@ const DashboardPage = () => {
         </div>
         <div className="pt-8">
           <h2 className="text-sm">Recent Transactions</h2>
+          <div className="flex flex-col space-y-4 pt-4">
+            <div className="rounded-xl flex shadow-md border justify-between items-center h-12 px-3 py-8">
+              <div className="flex space-x-4 items-center">
+                <img src={HealthIcon} alt="Health Icon" className="h-8 w-8" />
+                <div>
+                  <p className="font-bold text-md">Dentist Appointment</p>
+                  <small>1st Jan, 2024</small>
+                </div>
+              </div>
+              <p className="font-bold text-sm">-$200</p>
+            </div>
+            <div className="rounded-xl flex shadow-md border justify-between items-center h-12 px-3 py-8">
+              <div className="flex space-x-4 items-center">
+                <img
+                  src={InternetIcon}
+                  alt="Internet Icon"
+                  className="h-8 w-8"
+                />
+                <div>
+                  <p className="font-bold text-md">Data Subscription</p>
+                  <small>2nd Jan, 2024</small>
+                </div>
+              </div>
+              <p className="font-bold text-sm">-$200</p>
+            </div>
+            <div className="rounded-xl flex shadow-md border justify-between items-center h-12 px-3 py-8">
+              <div className="flex space-x-4 items-center">
+                <img
+                  src={GasolineIcon}
+                  alt="Gasoline Icon"
+                  className="h-8 w-8"
+                />
+                <div>
+                  <p className="font-bold text-md">Filled the tank</p>
+                  <small>30th Dec, 2023</small>
+                </div>
+              </div>
+              <p className="font-bold text-sm">-$1600</p>
+            </div>
+          </div>
         </div>
       </main>
     </div>

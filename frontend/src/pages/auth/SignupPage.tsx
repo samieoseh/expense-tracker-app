@@ -114,7 +114,7 @@ const SignupPage = () => {
           </form>
         </Form>
         <p className="text-muted-foreground text-center pt-4 text-sm">
-          Already have an account{" "}
+          Already have an account{", "}
           <Link to="/auth/login" className="text-foreground underline">
             Sign in now
           </Link>

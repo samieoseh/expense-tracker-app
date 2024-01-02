@@ -108,7 +108,7 @@ const LoginPage = () => {
           </form>
         </Form>
         <p className="text-muted-foreground text-center pt-4 text-sm">
-          Don&quot;t have an account{" "}
+          Don&quot;t have an account,{" "}
           <Link to="/auth/signup" className="text-foreground underline">
             Sign up now
           </Link>
