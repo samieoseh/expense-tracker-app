@@ -6,17 +6,19 @@ import NoPage from "./pages/NoPage";
 import { ThemeProvider } from "./components/ui/theme-provider";
 import AuthLayout from "./pages/auth/AuthLayout";
 import DashboardPage from "./pages/DashboardPage";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AuthLayout />}>
+          <Route element={<AuthLayout />}>
             <Route path="/auth/login" element={<LoginPage />} />
             <Route path="/auth/signup" element={<SignupPage />} />
           </Route>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
