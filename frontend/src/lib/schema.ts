@@ -42,3 +42,18 @@ export const signupFormSchema = z.object({
       "Password must contain at least 8 characters, an uppercase and a symbol"
     ),
 });
+
+export const expensesFormSchema = z.object({
+  title: z.string().min(4, {
+    message: "Title must be at least 4 characters",
+  }),
+  date: z.date({
+    required_error: "A date is required.",
+  }),
+  category: z.string({
+    required_error: "Please select a category to display",
+  }),
+  amount: z.coerce.number().min(0, {
+    message: "Amount must be greater than or equal to 0",
+  }),
+});

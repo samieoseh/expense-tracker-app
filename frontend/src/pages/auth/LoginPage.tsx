@@ -54,7 +54,7 @@ const LoginPage = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-[#fafafa] border-none h-14 text-foreground pl-4 dark:bg-[#2d2d2f]"
+                      className="bg-[#fafafa] border dark:border-none h-14 text-foreground pl-4 dark:bg-[#2d2d2f]"
                       placeholder="Email"
                       {...field}
                     />
@@ -71,7 +71,7 @@ const LoginPage = () => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        className="bg-[#fafafa] border-none h-14 outline-none text-foreground pl-4 dark:bg-[#2d2d2f]"
+                        className="bg-[#fafafa] border dark:border-none h-14 outline-none text-foreground pl-4 dark:bg-[#2d2d2f]"
                         type={passwordHidden ? "password" : "text"}
                         placeholder="Password"
                         {...field}
