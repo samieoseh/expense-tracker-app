@@ -43,17 +43,15 @@ export const signupFormSchema = z.object({
     ),
 });
 
-export const expensesFormSchema = z.object({
+export const transactionFormSchema = z.object({
   title: z.string().min(4, {
     message: "Title must be at least 4 characters",
   }),
   date: z.date({
     required_error: "A date is required.",
   }),
+  value: z.coerce.number(),
   category: z.string({
     required_error: "Please select a category to display",
-  }),
-  amount: z.coerce.number().min(0, {
-    message: "Amount must be greater than or equal to 0",
   }),
 });

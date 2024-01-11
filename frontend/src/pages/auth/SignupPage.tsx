@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import * as z from "zod";
@@ -16,8 +16,10 @@ import {
   FormItem,
   FormMessage,
 } from "../../components/ui/form";
+import { signup } from "../../lib/utils";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -29,8 +31,21 @@ const SignupPage = () => {
 
   const [passwordHidden, setPasswordHidden] = useState(true);
 
-  const onSubmit = (formData: z.infer<typeof signupFormSchema>) => {
-    console.log("submitted: ", formData);
+  const onSubmit = async (formData: z.infer<typeof signupFormSchema>) => {
+    const promise = signup(formData);
+    console.log(promise);
+    promise
+      .then((response) => {
+        console.log(response.data.data);
+        localStorage.setItem(
+          "accessToken",
+          JSON.stringify(response.data.data["access_token"])
+        );
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <div className="w-[90%] mx-auto flex flex-col">

@@ -31,7 +31,7 @@ const LabelBottomNavigation = ({
   const [open, setOpen] = useState(false);
   console.log(open);
   return (
-    <div className="absolute bottom-0 left-0 right-0 w-full h-12  flex outline outline-1 outline-[#f1f1f1] dark:outline-[#1e1e1e]">
+    <div className="fixed bg-background bottom-0 left-0 right-0 w-full h-12  flex outline outline-1 outline-[#f1f1f1] dark:outline-[#1e1e1e]">
       <div className="w-[90%] mx-auto flex items-center justify-between space-x-4 ">
         <BottomNavigationAction
           activeIcon={<HomeFilledIcon />}
