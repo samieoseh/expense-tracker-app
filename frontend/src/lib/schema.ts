@@ -55,3 +55,9 @@ export const transactionFormSchema = z.object({
     required_error: "Please select a category to display",
   }),
 });
+
+export const categoryFormSchema = z.object({
+  name: z.string().min(4, {
+    message: "Category name must be at least 4 characters",
+  }),
+});

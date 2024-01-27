@@ -20,28 +20,67 @@ import { transactionFormSchema } from "../../lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./input";
 import { Label } from "./label";
-import { expensesCategories, transactions } from "../../lib/constants";
 import { Button } from "./button";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { Calendar } from "./calendar";
-import { cn } from "../../lib/utils";
+import { addExpense, cn, getCategories } from "../../lib/utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "./use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./dialog";
+import CategoryDialog from "./category-dialog";
+import { CategoryType } from "../../typings";
 
 const AddExpensesTransaction = () => {
   const form = useForm<z.infer<typeof transactionFormSchema>>({
     resolver: zodResolver(transactionFormSchema),
   });
 
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  const mutation = useMutation({
+    mutationFn: addExpense,
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+    onSettled: (error) => {
+      if (error !== undefined) {
+        console.log("no errors");
+        toast({
+          title: "Transaction added successfully",
+          variant: "success",
+        });
+      }
+    },
+  });
+
   function onSubmit(data: z.infer<typeof transactionFormSchema>) {
-    transactions.push({
-      title: data.title,
-      date: data.date,
-      category: data.category,
-      value: data.value,
-      type: "expenses",
-    });
+    try {
+      mutation.mutate(data);
+    } catch (error) {
+      toast({
+        title: "Transaction failed",
+        description: "An error occurred during transaction",
+        variant: "destructive",
+      });
+      console.error(error);
+    }
   }
+
+  const { data } = useQuery<CategoryType>({
+    queryKey: ["category"],
+    queryFn: getCategories,
+  });
 
   return (
     <Form {...form}>
@@ -94,30 +133,46 @@ const AddExpensesTransaction = () => {
                 <Label className="font-bold">Category</Label>
               </FormControl>
               <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {expensesCategories.map((category, id) => (
-                      <SelectItem value={category.label} key={id}>
-                        <div className="flex items-center space-x-4">
-                          <img
-                            src={`/src/assets/${category.icon}`}
-                            alt={category.label}
-                            className="h-4 w-4"
-                          />
-                          <p>{category.label}</p>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Dialog>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <DialogTrigger>
+                        <Button
+                          variant="ghost"
+                          className="w-full flex justify-start"
+                        >
+                          Add a new category
+                        </Button>
+                      </DialogTrigger>
+                      {data?.data.map((category, id) => (
+                        <SelectItem key={id} value={category.id.toString()}>
+                          <div className="flex items-center space-x-4">
+                            <div
+                              className="p-1 flex items-center justify-center rounded-xl
+                             bg-red-500"
+                            ></div>
+                            <p>{category.name}</p>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Add a new category</DialogTitle>
+                    </DialogHeader>
+
+                    <CategoryDialog />
+                  </DialogContent>
+                </Dialog>
               </FormControl>
               <FormMessage className="font-bold text-red-500" />
             </FormItem>
@@ -165,7 +220,19 @@ const AddExpensesTransaction = () => {
             </FormItem>
           )}
         />
-        <Button>Add Transaction</Button>
+        <Button
+          className={`w-full rounded-md h-10 ${
+            queryClient.isMutating() && "opacity-50"
+          }`}
+        >
+          {queryClient.isMutating() ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait...
+            </>
+          ) : (
+            <>Add Transaction</>
+          )}
+        </Button>
       </form>
     </Form>
   );

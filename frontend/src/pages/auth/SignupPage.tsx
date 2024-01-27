@@ -5,7 +5,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupFormSchema } from "../../lib/schema";
-import { LucideEye, LucideEyeOff } from "lucide-react";
+import { Loader2, LucideEye, LucideEyeOff } from "lucide-react";
 import { useState } from "react";
 import GoogleLogo from "../../assets/google-light.svg";
 
@@ -17,9 +17,13 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import { signup } from "../../lib/utils";
+import { useToast } from "../../components/ui/use-toast";
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -32,8 +36,8 @@ const SignupPage = () => {
   const [passwordHidden, setPasswordHidden] = useState(true);
 
   const onSubmit = async (formData: z.infer<typeof signupFormSchema>) => {
+    setIsLoading(true);
     const promise = signup(formData);
-    console.log(promise);
     promise
       .then((response) => {
         console.log(response.data.data);
@@ -41,10 +45,20 @@ const SignupPage = () => {
           "accessToken",
           JSON.stringify(response.data.data["access_token"])
         );
+        toast({
+          title: "Signup Successful",
+          variant: "success",
+        });
         navigate("/dashboard");
       })
       .catch((error) => {
         console.log(error);
+        toast({
+          title: "Signup Failed",
+          description: "An error occurred during sign up",
+          variant: "destructive",
+        });
+        setIsLoading(false);
       });
   };
   return (
@@ -67,7 +81,7 @@ const SignupPage = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-[#fafafa] border-none h-14 text-foreground pl-4 dark:bg-[#2d2d2f]"
+                      className="bg-[#fafafa] border dark:border-none h-14 text-foreground pl-4 dark:bg-[#2d2d2f]"
                       placeholder="Name"
                       {...field}
                     />
@@ -83,7 +97,7 @@ const SignupPage = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-[#fafafa] border-none h-14 text-foreground pl-4 dark:bg-[#2d2d2f]"
+                      className="bg-[#fafafa] border dark:border-none h-14 text-foreground pl-4 dark:bg-[#2d2d2f]"
                       placeholder="Email"
                       {...field}
                     />
@@ -100,7 +114,7 @@ const SignupPage = () => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        className="bg-[#fafafa] border-none h-14 outline-none text-foreground pl-4 dark:bg-[#2d2d2f]"
+                        className="bg-[#fafafa] border dark:border-none h-14 outline-none text-foreground pl-4 dark:bg-[#2d2d2f]"
                         type={passwordHidden ? "password" : "text"}
                         placeholder="Password"
                         {...field}
@@ -123,8 +137,19 @@ const SignupPage = () => {
               )}
             />
 
-            <Button className="bg-secondary w-full rounded-md h-14 dark:text-white tracking-widest">
-              SIGN UP
+            <Button
+              className={`bg-secondary w-full rounded-md h-14 dark:text-white tracking-widest ${
+                isLoading && "opacity-50"
+              }`}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                  wait...
+                </>
+              ) : (
+                <>SIGN UP</>
+              )}
             </Button>
           </form>
         </Form>

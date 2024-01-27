@@ -14,8 +14,8 @@ import { Label } from "./label";
 import { Input } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
-import { cn } from "../../lib/utils";
-import { CalendarIcon } from "lucide-react";
+import { addIncome, cn } from "../../lib/utils";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { Calendar } from "./calendar";
 import { format } from "date-fns";
 import {
@@ -26,15 +26,49 @@ import {
   SelectValue,
 } from "./select";
 import { incomeCategories } from "../../lib/constants";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "./use-toast";
 
 const AddIncomeTransaction = () => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  const mutation = useMutation({
+    mutationFn: addIncome,
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+    onSettled: (error) => {
+      if (error !== undefined) {
+        console.log("no errors");
+        toast({
+          title: "Transaction added successfully",
+          variant: "success",
+        });
+        form.reset();
+      }
+    },
+  });
+
   const form = useForm<z.infer<typeof transactionFormSchema>>({
     resolver: zodResolver(transactionFormSchema),
   });
 
   function onSubmit(data: z.infer<typeof transactionFormSchema>) {
-    console.log(data);
+    try {
+      mutation.mutate(data);
+    } catch (error) {
+      toast({
+        title: "Transaction failed",
+        description: "An error occurred during transaction",
+        variant: "destructive",
+      });
+      console.error(error);
+    }
   }
+
   return (
     <Form {...form}>
       <form
@@ -97,11 +131,13 @@ const AddIncomeTransaction = () => {
                   </FormControl>
                   <SelectContent>
                     {incomeCategories.map((category, id) => {
-                      const Svg = category.icon;
                       return (
-                        <SelectItem value={category.label} key={id}>
+                        <SelectItem value={category.value} key={id}>
                           <div className="flex items-center space-x-4">
-                            <Svg />
+                            <div
+                              className="p-1 flex items-center justify-center rounded-xl
+                             bg-green-500"
+                            ></div>
                             <p>{category.label}</p>
                           </div>
                         </SelectItem>
@@ -156,7 +192,19 @@ const AddIncomeTransaction = () => {
             </FormItem>
           )}
         />
-        <Button>Add Transaction</Button>
+        <Button
+          className={`w-full rounded-md h-10 ${
+            queryClient.isMutating() && "opacity-50"
+          }`}
+        >
+          {queryClient.isMutating() ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait...
+            </>
+          ) : (
+            <>Add Transaction</>
+          )}
+        </Button>
       </form>
     </Form>
   );

@@ -1,7 +1,12 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import * as z from "zod";
-import { signupFormSchema } from "./schema";
+import {
+  categoryFormSchema,
+  loginFormSchema,
+  signupFormSchema,
+  transactionFormSchema,
+} from "./schema";
 import axios from "axios";
 import { baseUrl } from "./constants";
 
@@ -22,19 +27,108 @@ export async function signup(formData: z.infer<typeof signupFormSchema>) {
   });
 }
 
+export async function login(formData: z.infer<typeof loginFormSchema>) {
+  return axios.post(baseUrl + "/auth/signin", {
+    password: formData.password,
+    email: formData.email,
+  });
+}
+
 export async function getUser() {
-  console.log("accessToken", localStorage.getItem("accessToken"));
+  const accessToken = localStorage.getItem("accessToken") ?? "{}";
   const config = {
     headers: {
-      Authorization:
-        "Bearer " + JSON.parse(localStorage.getItem("accessToken") ?? ""),
+      Authorization: "Bearer " + JSON.parse(accessToken),
     },
   };
-  console.log(config);
   try {
     const response = await axios.get(baseUrl + "/user", config);
     return response.data;
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function getTransactions() {
+  const accessToken = localStorage.getItem("accessToken") ?? "{}";
+  const config = {
+    headers: {
+      Authorization: "Bearer " + JSON.parse(accessToken),
+    },
+  };
+  try {
+    const response = await axios.get(baseUrl + "/user/transactions", config);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function addIncome(data: z.infer<typeof transactionFormSchema>) {
+  const accessToken = localStorage.getItem("accessToken") ?? "{}";
+  const config = {
+    headers: {
+      Authorization: "Bearer " + JSON.parse(accessToken),
+    },
+  };
+  const response = await axios.post(
+    baseUrl + "/income",
+    {
+      amount: data.value,
+      incomeType: data.category,
+      title: data.title,
+      date: data.date,
+    },
+    config
+  );
+  return response.data;
+}
+
+export async function addExpense(data: z.infer<typeof transactionFormSchema>) {
+  const accessToken = localStorage.getItem("accessToken") ?? "{}";
+  const config = {
+    headers: {
+      Authorization: "Bearer " + JSON.parse(accessToken),
+    },
+  };
+  console.log(data);
+  const response = await axios.post(
+    baseUrl + "/expense",
+    {
+      amount: data.value,
+      categoryId: data.category,
+      title: data.title,
+      date: data.date,
+    },
+    config
+  );
+  return response.data;
+}
+
+export async function addCategory(data: z.infer<typeof categoryFormSchema>) {
+  const accessToken = localStorage.getItem("accessToken") ?? "{}";
+  const config = {
+    headers: {
+      Authorization: "Bearer " + JSON.parse(accessToken),
+    },
+  };
+
+  const response = await axios.post(
+    baseUrl + "/category",
+    {
+      name: data.name.slice(0, 1).toUpperCase() + data.name.slice(1),
+    },
+    config
+  );
+  return response.data;
+}
+
+export async function getCategories() {
+  const accessToken = localStorage.getItem("accessToken") ?? "{}";
+  const config = {
+    headers: {
+      Authorization: "Bearer " + JSON.parse(accessToken),
+    },
+  };
+  const response = await axios.get(baseUrl + "/category", config);
+  return response.data;
 }
