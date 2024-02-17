@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginFormSchema } from "../../lib/schema";
-import { LucideEye, LucideEyeOff } from "lucide-react";
+import { Loader2, LucideEye, LucideEyeOff } from "lucide-react";
 import { useState } from "react";
 import GoogleLogo from "../../assets/google-light.svg";
 
@@ -16,20 +16,38 @@ import {
   FormItem,
   FormMessage,
 } from "../../components/ui/form";
+import { login } from "../../lib/utils";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "test56@gmail.com",
+      password: "Password@123",
     },
   });
 
   const [passwordHidden, setPasswordHidden] = useState(true);
 
   const onSubmit = (formData: z.infer<typeof loginFormSchema>) => {
-    console.log("submitted: ", formData);
+    setIsLoading(true);
+    const promise = login(formData);
+    promise
+      .then((response) => {
+        console.log(response.data.data);
+        localStorage.setItem(
+          "accessToken",
+          JSON.stringify(response.data.data["access_token"])
+        );
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
   };
   return (
     <div className="w-[90%] mx-auto flex flex-col">
@@ -54,7 +72,7 @@ const LoginPage = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-[#fafafa] border-none h-14 text-foreground pl-4 dark:bg-[#2d2d2f]"
+                      className="bg-[#fafafa] border dark:border-none h-14 text-foreground pl-4 dark:bg-[#2d2d2f]"
                       placeholder="Email"
                       {...field}
                     />
@@ -71,7 +89,7 @@ const LoginPage = () => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        className="bg-[#fafafa] border-none h-14 outline-none text-foreground pl-4 dark:bg-[#2d2d2f]"
+                        className="bg-[#fafafa] border dark:border-none h-14 outline-none text-foreground pl-4 dark:bg-[#2d2d2f]"
                         type={passwordHidden ? "password" : "text"}
                         placeholder="Password"
                         {...field}
@@ -102,13 +120,24 @@ const LoginPage = () => {
               )}
             />
 
-            <Button className="bg-secondary w-full rounded-md h-14 dark:text-white tracking-widest">
-              SIGN IN
+            <Button
+              className={`bg-secondary w-full rounded-md h-14 dark:text-white tracking-widest ${
+                isLoading && "opacity-50"
+              }`}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                  wait...
+                </>
+              ) : (
+                <>SIGN IN</>
+              )}
             </Button>
           </form>
         </Form>
         <p className="text-muted-foreground text-center pt-4 text-sm">
-          Don&quot;t have an account{" "}
+          Don&quot;t have an account,{" "}
           <Link to="/auth/signup" className="text-foreground underline">
             Sign up now
           </Link>
