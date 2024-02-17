@@ -1,12 +1,12 @@
-import { ModeToggle } from "../components/ui/mode-toggle";
-import DashboardHome from "../components/ui/dashboard-home";
+// import { ModeToggle } from "../components/ui/mode-toggle";
+// import DashboardHome from "../components/ui/dashboard-home";
 import LabelBottomNavigation from "../components/ui/bottom-navigation";
-import { DashboardStateType, UserType } from "../typings";
+import { DashboardStateType } from "../typings";
 import { useState } from "react";
 import DashboardStatistics from "../components/ui/dashboard-statistics";
 import DashboardProfile from "../components/ui/dashboard-profile";
-import { getUser } from "../lib/utils";
-import { useQuery } from "@tanstack/react-query";
+// import { getUser } from "../lib/utils";
+// import { useQuery } from "@tanstack/react-query";
 
 const DashboardPage = () => {
   //const { data } = useQuery<UserType>({ queryKey: ["user"], queryFn: getUser });
@@ -30,10 +30,10 @@ const DashboardPage = () => {
             </div>
           </header>
           {value === "home" && <DashboardHome userData={data} />} */}
-          {value === "statistics" && <DashboardStatistics />}
-          {value === "profile" && <DashboardProfile />}
-          <LabelBottomNavigation value={value} setValue={setValue} />
-        {/* </div> */}
+      {value === "statistics" && <DashboardStatistics />}
+      {value === "profile" && <DashboardProfile />}
+      <LabelBottomNavigation value={value} setValue={setValue} />
+      {/* </div> */}
       {/* ) : (
         <p>Loading</p>
       )} */}
