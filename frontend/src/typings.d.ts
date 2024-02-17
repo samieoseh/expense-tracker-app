@@ -23,6 +23,7 @@ export type TransactionType = {
     incomeType: string;
     title: string;
     userId: number;
+    createdDate: string;
     transactionType: string;
   }[];
 };

@@ -18,7 +18,7 @@ const DashboardHome = ({ userData }: { userData: UserType }) => {
               ${userData.data.balance.toFixed(2)}
             </h1>
           </div>
-          <div className="flex justify-between pt-8 space-x-8 md:w-[50%]">
+          <div className="flex justify-between pt-8 space-x-2 md:w-[50%]">
             <div className="flex flex-1 space-x-4 rounded-lg shadow-md py-3 px-4 bg-white dark:bg-[#1c1c1c] items-center">
               <div className="bg-green-100 w-12 h-12 flex items-center justify-center rounded-[100%]">
                 <svg

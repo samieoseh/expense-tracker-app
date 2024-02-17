@@ -47,8 +47,8 @@ const LabelBottomNavigation = ({
             </div>
           </DrawerTrigger>
           <DrawerContent>
-            <DrawerHeader className="text-left">
-              <DrawerTitle>Add a new transaction</DrawerTitle>
+            <DrawerHeader className="text-center">
+              <DrawerTitle>New Transaction</DrawerTitle>
             </DrawerHeader>
             <DashboardAdd />
           </DrawerContent>

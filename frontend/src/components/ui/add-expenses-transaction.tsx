@@ -19,7 +19,6 @@ import {
 import { transactionFormSchema } from "../../lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./input";
-import { Label } from "./label";
 import { Button } from "./button";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { format } from "date-fns";
@@ -94,10 +93,8 @@ const AddExpensesTransaction = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Label className="font-bold">Title</Label>
-              </FormControl>
-              <FormControl>
                 <Input
+                  placeholder="Description"
                   className="bg-[#fafafa] dark:border-none text-foreground pl-4 h-10 dark:bg-[#2d2d2f]"
                   {...field}
                 />
@@ -112,10 +109,8 @@ const AddExpensesTransaction = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Label className="font-bold">Amount</Label>
-              </FormControl>
-              <FormControl>
                 <Input
+                  placeholder="Amount"
                   className="bg-[#fafafa] dark:border-none text-foreground pl-4 h-10 dark:bg-[#2d2d2f]"
                   {...field}
                 />
@@ -129,9 +124,7 @@ const AddExpensesTransaction = () => {
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormControl>
-                <Label className="font-bold">Category</Label>
-              </FormControl>
+              <FormControl></FormControl>
               <FormControl>
                 <Dialog>
                   <Select
@@ -140,7 +133,7 @@ const AddExpensesTransaction = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
+                        <SelectValue placeholder="Category" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -183,7 +176,6 @@ const AddExpensesTransaction = () => {
           name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <Label className="font-bold">Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>

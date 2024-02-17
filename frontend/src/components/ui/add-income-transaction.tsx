@@ -10,7 +10,6 @@ import {
   FormMessage,
 } from "../ui/form";
 
-import { Label } from "./label";
 import { Input } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
@@ -81,11 +80,9 @@ const AddIncomeTransaction = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Label className="font-bold">Title</Label>
-              </FormControl>
-              <FormControl>
                 <Input
                   className="bg-[#fafafa] dark:border-none text-foreground pl-4 h-10 dark:bg-[#2d2d2f]"
+                  placeholder="Description"
                   {...field}
                 />
               </FormControl>
@@ -99,11 +96,9 @@ const AddIncomeTransaction = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Label className="font-bold">Amount</Label>
-              </FormControl>
-              <FormControl>
                 <Input
                   className="bg-[#fafafa] dark:border-none text-foreground pl-4 h-10 dark:bg-[#2d2d2f]"
+                  placeholder="Amount"
                   {...field}
                 />
               </FormControl>
@@ -117,16 +112,13 @@ const AddIncomeTransaction = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Label className="font-bold">Category</Label>
-              </FormControl>
-              <FormControl>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
+                      <SelectValue placeholder="Category" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -155,7 +147,6 @@ const AddIncomeTransaction = () => {
           name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <Label className="font-bold">Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>

@@ -75,18 +75,22 @@ const LineChart = ({
                 display: false,
               },
               ticks: {
-                callback: function (item, index) {
-                  if (index === data.datasets[0].data.length + 1) {
-                    if (+item >= 1000) {
-                      return (
-                        "$" +
-                        item.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      );
-                    } else {
-                      return "$" + item;
-                    }
+                callback: (val, index, ticks) => {
+                  if (!val) return 0;
+                  if (index === ticks.length - 1) {
+                    const units = ["", "K", "M", "B"];
+                    const k = 1000;
+                    const magnitude = Math.floor(Math.log(+val) / Math.log(k));
+                    return (
+                      "$" +
+                      " " +
+                      +val / Math.pow(k, magnitude) +
+                      " " +
+                      units[magnitude]
+                    );
                   }
                 },
+
                 color: color,
               },
             },

@@ -20,6 +20,13 @@ const DashboardStatistics = () => {
     parseFloat(transaction.amount.replace("$", "").replace(/,/g, ""))
   );
 
+  const cumulativeIncomeAmounts = incomeAmounts.map(
+    (
+      (sum) => (value) =>
+        (sum += value)
+    )(0)
+  );
+
   const expenseTransactions =
     data?.data?.filter(
       (transaction) => transaction.transactionType === "expense"
@@ -33,6 +40,12 @@ const DashboardStatistics = () => {
   const expenseAmounts = expenseTransactions.map((transaction) =>
     parseFloat(transaction.amount.replace("$", "").replace(/,/g, ""))
   );
+  const cumulativeExpenseAmounts = expenseAmounts.map(
+    (
+      (sum) => (value) =>
+        (sum += value)
+    )(0)
+  );
 
   return (
     <div className="pt-8 h-64">
@@ -43,7 +56,7 @@ const DashboardStatistics = () => {
             <LineChart
               id="1"
               labels={incomeDates}
-              amounts={incomeAmounts}
+              amounts={cumulativeIncomeAmounts}
               colors={{ dark: "rgb(0, 173, 181)", light: "rgb(0, 123, 255)" }}
             />
           </div>
@@ -52,7 +65,7 @@ const DashboardStatistics = () => {
             <LineChart
               id="2"
               labels={expenseDates}
-              amounts={expenseAmounts}
+              amounts={cumulativeExpenseAmounts}
               colors={{ dark: "rgb(220, 53, 69)", light: "rgb(255, 102, 102)" }}
             />
           </div>
