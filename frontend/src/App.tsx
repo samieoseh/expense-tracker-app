@@ -26,7 +26,9 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
               </Route>
-              <Route path="/" element={<DashboardPage />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<DashboardPage />} />
+              </Route>
               <Route path="*" element={<NoPage />} />
             </Routes>
           </AuthProvider>
