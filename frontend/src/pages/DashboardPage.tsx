@@ -1,42 +1,75 @@
-// import { ModeToggle } from "../components/ui/mode-toggle";
-// import DashboardHome from "../components/ui/dashboard-home";
+import { ModeToggle } from "../components/ui/mode-toggle";
+import DashboardHome from "../components/ui/dashboard-home";
 import LabelBottomNavigation from "../components/ui/bottom-navigation";
-import { DashboardStateType } from "../typings";
+import { DashboardStateType, TransactionType, UserType } from "../typings";
 import { useState } from "react";
 import DashboardStatistics from "../components/ui/dashboard-statistics";
-import DashboardProfile from "../components/ui/dashboard-profile";
-// import { getUser } from "../lib/utils";
-// import { useQuery } from "@tanstack/react-query";
+import { getTransactions, getUser } from "../lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { useMediaQuery } from "react-responsive";
+import UserIcon from "../components/ui/user-icon";
 
 const DashboardPage = () => {
-  //const { data } = useQuery<UserType>({ queryKey: ["user"], queryFn: getUser });
-  const [value, setValue] = useState<DashboardStateType>("profile");
-
+  const { data: userData } = useQuery<UserType>({
+    queryKey: ["user"],
+    queryFn: getUser,
+  });
+  const { data: transactionData } = useQuery<TransactionType>({
+    queryKey: ["transactions"],
+    queryFn: getTransactions,
+  });
+  const [value, setValue] = useState<DashboardStateType>("home");
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
   return (
     <div>
-      {/* {data ? (
+      {userData && transactionData ? (
         <div className="w-[90%] mx-auto pt-4 h-[100vh]">
           <header className="mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="border-none rounded-[100%] flex items-center justify-center w-8 h-8 bg-blue-500">
-                <p className="text-sm text-white">
-                  {data.data.firstName.slice(0, 1).toUpperCase()}
-                </p>
-              </div>
-              <p className="text-sm">Welcome {data.data.firstName}</p>
+              <UserIcon
+                value={userData.data.firstName.slice(0, 1).toUpperCase()}
+              />
+              <p className="text-sm">Welcome {userData.data.firstName}</p>
             </div>
             <div>
               <ModeToggle />
             </div>
           </header>
-          {value === "home" && <DashboardHome userData={data} />} */}
-      {value === "statistics" && <DashboardStatistics />}
-      {value === "profile" && <DashboardProfile />}
-      <LabelBottomNavigation value={value} setValue={setValue} />
-      {/* </div> */}
-      {/* ) : (
+          {!isDesktopOrLaptop && (
+            <>
+              {value === "home" && (
+                <DashboardHome
+                  userData={userData}
+                  transactionData={transactionData}
+                />
+              )}
+              {value === "statistics" && (
+                <DashboardStatistics transactionData={transactionData} />
+              )}
+            </>
+          )}
+          {isDesktopOrLaptop && (
+            <div className="flex flex-row w-full justify-between gap-32">
+              <DashboardHome
+                userData={userData}
+                transactionData={transactionData}
+                className="flex-1"
+              />
+              <DashboardStatistics transactionData={transactionData} />
+            </div>
+          )}
+
+          <LabelBottomNavigation
+            value={value}
+            setValue={setValue}
+            className="xl:hidden"
+          />
+        </div>
+      ) : (
         <p>Loading</p>
-      )} */}
+      )}
     </div>
   );
 };
