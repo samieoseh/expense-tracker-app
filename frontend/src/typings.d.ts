@@ -1,3 +1,10 @@
+export type AuthContextType = {
+  login: (
+    formData: z.infer<typeof loginFormSchema>,
+  ) => Promise<AxiosResponse<any, any>>;
+  logout: () => void;
+  isAuthenticated: boolean;
+};
 export type DashboardStateType = "home" | "add" | "statistics" | "profile";
 
 export type UserType = {

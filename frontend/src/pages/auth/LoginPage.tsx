@@ -16,11 +16,15 @@ import {
   FormItem,
   FormMessage,
 } from "../../components/ui/form";
-import { login } from "../../lib/utils";
+import { useAuth } from "../../AuthContext";
+import { useToast } from "../../components/ui/use-toast";
+import { AuthContextType } from "../../typings";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const { login } = useAuth() as AuthContextType;
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -32,25 +36,27 @@ const LoginPage = () => {
 
   const [passwordHidden, setPasswordHidden] = useState(true);
 
-  const onSubmit = (formData: z.infer<typeof loginFormSchema>) => {
+  const onSubmit = async (formData: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
-    const promise = login(formData);
-    promise
-      .then((response) => {
-        console.log(response.data.data);
-        localStorage.setItem(
-          "accessToken",
-          JSON.stringify(response.data.data["access_token"])
-        );
-        navigate("/dashboard");
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
+    const response = await login(formData);
+
+    if (response.status === 201) {
+      setIsLoading(false);
+      localStorage.setItem(
+        "accessToken",
+        JSON.stringify(response.data.data["access_token"]),
+      );
+      navigate("/dashboard");
+    } else if (response.status !== 201) {
+      setIsLoading(false);
+      toast({
+        title: "An error occurred during signup",
+        variant: "success",
       });
+    }
   };
   return (
-    <div className="w-[90%] mx-auto flex flex-col">
+    <div className="w-[90%] lg:w-[40%] mx-auto flex flex-col">
       <div className="pt-4">
         <div className="flex flex-col space-y-4">
           <h1 className="text-foreground font-bold text-[1.5rem]">

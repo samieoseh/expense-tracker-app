@@ -7,8 +7,6 @@ import {
   HomeOutlinedIcon,
   StatisticsFilledIcon,
   StatisticsOutlinedIcon,
-  UserFilledIcon,
-  UserOutlinedIcon,
 } from "./icons";
 
 import {
@@ -20,18 +18,26 @@ import {
 } from "../ui/drawer";
 import { useState } from "react";
 import DashboardAdd from "./dasboard-add";
+import clsx from "clsx";
 
 const LabelBottomNavigation = ({
   value,
   setValue,
+  className,
 }: {
   value: DashboardStateType;
   setValue: React.Dispatch<React.SetStateAction<DashboardStateType>>;
+  className: string;
 }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed bg-background bottom-0 left-0 right-0 w-full h-12  flex outline outline-1 outline-[#f1f1f1] dark:outline-[#1e1e1e]">
+    <div
+      className={clsx(
+        "fixed bg-background bottom-0 left-0 right-0 w-full h-12  flex outline outline-1 outline-[#f1f1f1] dark:outline-[#1e1e1e]",
+        className,
+      )}
+    >
       <div className="w-[90%] mx-auto flex items-center justify-between space-x-4 ">
         <BottomNavigationAction
           activeIcon={<HomeFilledIcon />}
@@ -59,13 +65,6 @@ const LabelBottomNavigation = ({
           setValue={setValue}
           value={value}
           label="statistics"
-        />
-        <BottomNavigationAction
-          activeIcon={<UserFilledIcon />}
-          inactiveIcon={<UserOutlinedIcon />}
-          setValue={setValue}
-          value={value}
-          label="profile"
         />
       </div>
     </div>

@@ -103,7 +103,7 @@ const LineChart = ({
         },
       });
     }
-  }, [chartRef, id, theme]);
+  }, [chartRef, id, theme, amounts]);
   return <canvas ref={chartRef} id={id} width="400" height="200" />;
 };
 

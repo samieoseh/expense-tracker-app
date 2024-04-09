@@ -43,7 +43,7 @@ const SignupPage = () => {
         console.log(response.data.data);
         localStorage.setItem(
           "accessToken",
-          JSON.stringify(response.data.data["access_token"])
+          JSON.stringify(response.data.data["access_token"]),
         );
         toast({
           title: "Signup Successful",
@@ -62,12 +62,15 @@ const SignupPage = () => {
       });
   };
   return (
-    <div className="w-[90%] mx-auto flex flex-col">
+    <div className="w-[90%] lg:w-[40%] mx-auto flex flex-col">
       <div className="pt-4">
         <div className="flex flex-col space-y-4">
           <h1 className="text-foreground font-bold text-[1.5rem]">
             CREATE ACCOUNT
           </h1>
+          <p className="text-muted-foreground text-sm">
+            Please enter your details to create a new account
+          </p>
         </div>
         <Form {...form}>
           <form
