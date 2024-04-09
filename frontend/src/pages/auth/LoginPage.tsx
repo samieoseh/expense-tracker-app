@@ -24,7 +24,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { login } = useAuth() as AuthContextType;
+  const { login, authError } = useAuth() as AuthContextType;
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -38,21 +38,31 @@ const LoginPage = () => {
 
   const onSubmit = async (formData: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
-    const response = await login(formData);
 
-    if (response.status === 201) {
-      setIsLoading(false);
-      localStorage.setItem(
-        "accessToken",
-        JSON.stringify(response.data.data["access_token"]),
-      );
-      navigate("/dashboard");
-    } else if (response.status !== 201) {
-      setIsLoading(false);
+    try {
+      const response = await login(formData);
+
+      if (response.status === 201) {
+        setIsLoading(false);
+        localStorage.setItem(
+          "accessToken",
+          JSON.stringify(response.data.data["access_token"]),
+        );
+        navigate("/dashboard");
+      } else if (response.status !== 201) {
+        setIsLoading(false);
+        toast({
+          title: "An error occurred during signup",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.log(error);
       toast({
         title: "An error occurred during signup",
-        variant: "success",
+        variant: "destructive",
       });
+      setIsLoading(false);
     }
   };
   return (
@@ -63,7 +73,7 @@ const LoginPage = () => {
             WELCOME BACK!
           </h1>
           <p className="text-muted-foreground text-sm">
-            Please enter your details to sign in to your account
+            Please enter your details to sign in to your account77777
           </p>
         </div>
         <Form {...form}>

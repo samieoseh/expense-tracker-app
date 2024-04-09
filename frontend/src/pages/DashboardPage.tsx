@@ -68,7 +68,7 @@ const DashboardPage = () => {
           />
         </div>
       ) : (
-        <p>Loading</p>
+        <p className="text-[32px] text-center mt-64">Loading...</p>
       )}
     </div>
   );

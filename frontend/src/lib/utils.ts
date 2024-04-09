@@ -27,13 +27,6 @@ export async function signup(formData: z.infer<typeof signupFormSchema>) {
   });
 }
 
-export async function login(formData: z.infer<typeof loginFormSchema>) {
-  return axios.post(baseUrl + "/auth/signin", {
-    password: formData.password,
-    email: formData.email,
-  });
-}
-
 export async function getUser() {
   const accessToken = localStorage.getItem("accessToken") ?? "{}";
   const config = {
@@ -78,7 +71,7 @@ export async function addIncome(data: z.infer<typeof transactionFormSchema>) {
       title: data.title,
       date: data.date,
     },
-    config
+    config,
   );
   return response.data;
 }
@@ -99,7 +92,7 @@ export async function addExpense(data: z.infer<typeof transactionFormSchema>) {
       title: data.title,
       date: data.date,
     },
-    config
+    config,
   );
   return response.data;
 }
@@ -117,7 +110,7 @@ export async function addCategory(data: z.infer<typeof categoryFormSchema>) {
     {
       name: data.name.slice(0, 1).toUpperCase() + data.name.slice(1),
     },
-    config
+    config,
   );
   return response.data;
 }
