@@ -3,7 +3,6 @@ export type AuthContextType = {
     formData: z.infer<typeof loginFormSchema>,
   ) => Promise<AxiosResponse<any, any>>;
   logout: () => void;
-  authError: string | null;
   isAuthenticated: boolean;
 };
 export type DashboardStateType = "home" | "add" | "statistics" | "profile";

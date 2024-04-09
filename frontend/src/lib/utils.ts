@@ -3,7 +3,6 @@ import { twMerge } from "tailwind-merge";
 import * as z from "zod";
 import {
   categoryFormSchema,
-  loginFormSchema,
   signupFormSchema,
   transactionFormSchema,
 } from "./schema";
