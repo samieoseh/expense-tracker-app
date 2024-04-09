@@ -73,7 +73,7 @@ const LoginPage = () => {
             WELCOME BACK!
           </h1>
           <p className="text-muted-foreground text-sm">
-            Please enter your details to sign in to your account77777
+            Please enter your details to sign in to your account
           </p>
         </div>
         <Form {...form}>
