@@ -20,8 +20,9 @@ const DashboardPage = () => {
   });
   const [value, setValue] = useState<DashboardStateType>("home");
   const isDesktopOrLaptop = useMediaQuery({
-    query: "(min-width: 1024px)",
+    query: "(min-width: 1000px)",
   });
+
   return (
     <div>
       {userData && transactionData ? (

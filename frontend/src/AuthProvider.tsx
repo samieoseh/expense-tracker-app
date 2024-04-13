@@ -18,6 +18,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (response.status === 201) {
       setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
     }
     return response;
   };

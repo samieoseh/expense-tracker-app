@@ -59,7 +59,7 @@ const LoginPage = () => {
     } catch (error) {
       console.log(error);
       toast({
-        title: "An error occurred during signup",
+        title: "An error occurred during login",
         variant: "destructive",
       });
       setIsLoading(false);
